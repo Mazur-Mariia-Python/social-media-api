@@ -56,11 +56,25 @@ class Post(models.Model):
         null=True,
         upload_to=post_picture_file_path,
     )
-    author = models.ForeignKey(Profile, on_delete=models.CASCADE,
-                               related_name="posts")
+    author = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="posts")
 
     class Meta:
         ordering = ["-created_at"]
 
     def __str__(self):
         return f"Post by {self.author} at {self.created_at}"
+
+
+class Comment(models.Model):
+    content = models.TextField()
+    commented_at = models.DateTimeField(auto_now_add=True)
+    author = models.ForeignKey(
+        Profile, on_delete=models.CASCADE, related_name="comments"
+    )
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comments")
+
+    class Meta:
+        ordering = ["-commented_at"]
+
+    def __str__(self):
+        return f"Comment by {self.author} at {self.commented_at}"
