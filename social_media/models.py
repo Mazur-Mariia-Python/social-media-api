@@ -1,5 +1,14 @@
+import os
+import uuid
 from django.db import models
 from django.conf import settings
+from django.utils.text import slugify
+
+
+def profile_picture_file_path(instance, filename):
+    _, extension = os.path.splitext(filename)
+    filename = f"{slugify(instance.profile_picture)}-{uuid.uuid4()}{extension}"
+    return os.path.join("uploads/profile_pictures/", filename)
 
 
 class Profile(models.Model):
@@ -46,6 +55,12 @@ class Relationship(models.Model):
 
     def __str__(self):
         return f"{self.my_follower} follows {self.following}"
+
+
+def post_picture_file_path(instance, filename):
+    _, extension = os.path.splitext(filename)
+    filename = f"{slugify(instance.post_picture)}-{uuid.uuid4()}{extension}"
+    return os.path.join("uploads/post_pictures/", filename)
 
 
 class Post(models.Model):
