@@ -78,3 +78,16 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"Comment by {self.author} at {self.commented_at}"
+
+
+class Like(models.Model):
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="likes")
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="likes")
+    liked_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ("profile", "post")
+        ordering = ["-liked_at"]
+
+    def __str__(self):
+        return f"Like by {self.profile} at {self.liked_at}"
